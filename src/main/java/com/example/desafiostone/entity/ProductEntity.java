@@ -19,6 +19,8 @@ public class ProductEntity {
     @GeneratedValue
     private UUID id;
 
+    //todo: price - 26/10/2023
+
     @Column(name = "title")
     private String title;
 

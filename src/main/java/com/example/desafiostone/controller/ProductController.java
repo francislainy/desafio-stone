@@ -7,21 +7,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/starstore/product")
+@RequestMapping("/starstore")
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping({"/{productId}", "/{productId}/"})
+    @GetMapping({"/product/{productId}", "/product/{productId}/"})
     public ResponseEntity<Product> getProduct(@PathVariable UUID productId) {
         return new ResponseEntity<>(productService.getProduct(productId), HttpStatus.OK);
     }
 
-    @PostMapping({"", "/"})
+    @GetMapping({"/products", "/products/"})
+    public ResponseEntity<List<Product>> getProducts() {
+        return new ResponseEntity<>(productService.getProducts(), HttpStatus.OK);
+    }
+
+    @PostMapping({"/product", "/product/"})
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
     }

@@ -8,6 +8,7 @@ import com.example.desafiostone.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -21,6 +22,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProduct(UUID productId) {
         return productMapper.toModel(productRepository.findById(productId).orElseThrow());
+    }
+
+    @Override
+    public List<Product> getProducts() {
+        return productRepository.findAll()
+                .stream()
+                .map(productMapper::toModel)
+                .toList();
     }
 
     @Override

@@ -1,35 +1,30 @@
 package com.example.desafiostone.pact.consumer;
 
 import au.com.dius.pact.consumer.dsl.DslPart;
-import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
+import au.com.dius.pact.consumer.dsl.PactDslJsonArray;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.PactSpecVersion;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import com.example.desafiostone.model.Product;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static com.example.desafiostone.constants.Constants.*;
 import static com.example.desafiostone.utils.Util.getMockRequest;
-import static java.time.LocalDate.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.GET;
 
 @ExtendWith(PactConsumerTestExt.class)
-class CreateProductIT {
+class GetProductsIT {
 
     Map<String, String> headers = new HashMap<>();
 
-    String path = "/starstore/product/";
+    String path = "/starstore/products/";
     UUID productId = UUID.fromString("f0652d7b-1fb4-490d-9fbf-adc23c65b2df");
 
     @Pact(provider = PACT_PROVIDER, consumer = PACT_CONSUMER)
@@ -37,16 +32,7 @@ class CreateProductIT {
         headers.put("Content-Type", "application/json");
         headers.put("Accept", "application/json");
 
-        DslPart bodyReceived = new PactDslJsonBody()
-                .stringType("title", "Blusa do Imperio")
-                .numberType("price", 7990)
-                .stringType("zipcode", "78993-000")
-                .stringType("seller", "João da Silva")
-                .stringType("thumbnail", "https://cdn.awsli.com.br/600x450/21/21351/produto/3853007/f66e8c63ab.jpg")
-                .date("date", "dd/MM/yyyy", new Date())
-                .close();
-
-        DslPart bodyReturned = new PactDslJsonBody()
+        DslPart bodyReturned = PactDslJsonArray.arrayEachLike()
                 .uuid("id", productId)
                 .stringType("title", "Blusa do Imperio")
                 .numberType("price", 7990)
@@ -57,31 +43,21 @@ class CreateProductIT {
                 .close();
 
         return builder
-                .given("A request to create a product")
-                .uponReceiving("A request to create a product")
-                .body(bodyReceived)
+                .given("A request to retrieve a list of products")
+                .uponReceiving("A request to retrieve a list of products")
                 .path(path)
-                .method(String.valueOf(POST))
+                .method(String.valueOf(GET))
                 .headers(headers)
                 .willRespondWith()
-                .status(201)
-                .body(bodyReturned)
+                .status(200)
+                .body(Objects.requireNonNull(bodyReturned))
                 .toPact();
     }
 
     @Test
     @PactTestFor(providerName = PACT_PROVIDER, port = MOCK_PACT_PORT, pactVersion = PactSpecVersion.V3)
     void runTest() {
-        Product product = Product.builder()
-                .title("Blusa do Imperio")
-                .zipcode("78993-000")
-                .seller("João da Silva")
-                .thumbnail("https://cdn.awsli.com.br/600x450/21/21351/produto/3853007/f66e8c63ab.jpg")
-                .date(now())
-                .build();
-
-        Response response = getMockRequest(headers).body(product).post(path);
-        assertEquals(201, response.getStatusCode());
+        Response response = getMockRequest(headers).get(path);
+        assertEquals(200, response.getStatusCode());
     }
-
 }

@@ -11,6 +11,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static java.time.LocalDate.now;
@@ -66,6 +68,20 @@ class ProductControllerTest {
         mockMvc.perform(get("/starstore/product/{productId}", productId))
                 .andExpect(status().isOk())
                 .andExpect(content().json(productResponseJson)
+                );
+    }
+
+    @Test
+    void getProducts() throws Exception {
+        when(productService.getProducts()).thenReturn(List.of(responseProduct));
+
+        List<Product> productList = new ArrayList<>();
+        productList.add(responseProduct);
+
+        String jsonResponse = jsonStringFromObject(productList);
+        mockMvc.perform(get("/starstore/products/", productId))
+                .andExpect(status().isOk())
+                .andExpect(content().json(jsonResponse)
                 );
     }
 

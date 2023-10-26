@@ -15,6 +15,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -70,6 +71,27 @@ class ProductServiceTest {
         when(productMapper.toModel(any())).thenReturn(expectedProduct);
 
         Product actualProduct = productService.getProduct(productId);
+
+        assertNotNull(actualProduct);
+        assertAll(
+                () -> assertEquals(expectedProduct.getTitle(), actualProduct.getTitle()),
+                () -> assertEquals(expectedProduct.getZipcode(), actualProduct.getZipcode()),
+                () -> assertEquals(expectedProduct.getSeller(), actualProduct.getSeller()),
+                () -> assertEquals(expectedProduct.getThumbnail(), actualProduct.getThumbnail()),
+                () -> assertEquals(expectedProduct.getDate(), actualProduct.getDate())
+        );
+    }
+
+    @Test
+    void getProducts() {
+        Product expectedProduct = productMapper.toModel(expectedProductEntity);
+
+        when(productRepository.findAll()).thenReturn(List.of(expectedProductEntity));
+        when(productMapper.toModel(any())).thenReturn(expectedProduct);
+
+        List<Product> productList = productService.getProducts();
+
+        Product actualProduct = productList.get(0);
 
         assertNotNull(actualProduct);
         assertAll(

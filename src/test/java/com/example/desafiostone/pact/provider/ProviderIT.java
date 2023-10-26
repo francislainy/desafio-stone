@@ -23,11 +23,12 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.desafiostone.constants.Constants.PACT_PROVIDER;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static com.example.desafiostone.utils.Util.getRequestSpecification;
 import static com.example.desafiostone.utils.Util.logCurlFromPact;
 
-@Provider("MY_PROVIDER")
+@Provider(PACT_PROVIDER)
 /* Uncomment this and comment @PactBroker instead to test locally by pasting a .json file for the contract under
  the target/pacts folder */
 @PactFolder("target/pacts")
@@ -71,8 +72,8 @@ class ProviderIT extends BasePostgresConfig {
     }
 
     @State("A request to create a product")
-    void createProduct() {
+    void createProduct() {}
 
-    }
-
+    @State("A request to retrieve a list of products")
+    void getProducts() {}
 }
