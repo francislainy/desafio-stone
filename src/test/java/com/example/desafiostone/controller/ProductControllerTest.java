@@ -8,6 +8,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
@@ -20,8 +21,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static utils.Util.convertToNewObject;
-import static utils.Util.jsonStringFromObject;
+import static com.example.desafiostone.utils.Util.convertToNewObject;
+import static com.example.desafiostone.utils.Util.jsonStringFromObject;
 
 @WebMvcTest(ProductController.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -51,7 +52,6 @@ class ProductControllerTest {
                 .date(now())
                 .build();
 
-
         responseProduct = convertToNewObject(requestProduct, Product.class);
         responseProduct.setId(productId);
 
@@ -73,9 +73,10 @@ class ProductControllerTest {
     void createProduct() throws Exception {
         when(productService.createProduct(any())).thenReturn(responseProduct);
 
-        mockMvc.perform(post("/starstore/product/"))
-                .andExpect(content().json(productResponseJson))
-                .andExpect(status().isOk())
+        mockMvc.perform(post("/starstore/product/")
+                        .content(productRequestJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
                 .andExpect(content().json(productResponseJson)
                 );
     }
