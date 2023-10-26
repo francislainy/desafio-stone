@@ -7,4 +7,6 @@ import java.util.UUID;
 public interface ProductService {
 
     Product getProduct(UUID productId);
+
+    Product createProduct(Product product);
 }

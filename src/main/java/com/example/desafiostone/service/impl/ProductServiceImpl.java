@@ -1,5 +1,6 @@
 package com.example.desafiostone.service.impl;
 
+import com.example.desafiostone.entity.ProductEntity;
 import com.example.desafiostone.mapper.ProductMapper;
 import com.example.desafiostone.model.Product;
 import com.example.desafiostone.repository.ProductRepository;
@@ -20,5 +21,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProduct(UUID productId) {
         return productMapper.toModel(productRepository.findById(productId).orElseThrow());
+    }
+
+    @Override
+    public Product createProduct(Product product) {
+        ProductEntity productEntity = productMapper.toEntity(product);
+        productEntity = productRepository.save(productEntity);
+
+        return productMapper.toModel(productEntity);
     }
 }
