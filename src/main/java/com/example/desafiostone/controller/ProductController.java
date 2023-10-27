@@ -1,6 +1,7 @@
 package com.example.desafiostone.controller;
 
 import com.example.desafiostone.model.Product;
+import com.example.desafiostone.model.Transaction;
 import com.example.desafiostone.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,4 +33,8 @@ public class ProductController {
         return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
     }
 
+    @PostMapping({"/buy", "/buy/"})
+    public ResponseEntity<Transaction> createPurchase(@RequestBody Transaction transaction) {
+        return new ResponseEntity<>(productService.buyProduct(transaction), HttpStatus.CREATED);
+    }
 }

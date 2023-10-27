@@ -1,6 +1,9 @@
 package com.example.desafiostone.controller;
 
+import com.example.desafiostone.model.Card;
+import com.example.desafiostone.model.Client;
 import com.example.desafiostone.model.Product;
+import com.example.desafiostone.model.Transaction;
 import com.example.desafiostone.service.ProductService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,10 +15,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.example.desafiostone.utils.Util.convertToNewObject;
+import static com.example.desafiostone.utils.Util.jsonStringFromObject;
 import static java.time.LocalDate.now;
 import static java.util.UUID.randomUUID;
 import static org.mockito.ArgumentMatchers.any;
@@ -24,8 +32,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.example.desafiostone.utils.Util.convertToNewObject;
-import static com.example.desafiostone.utils.Util.jsonStringFromObject;
 
 @WebMvcTest(ProductController.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -39,11 +45,12 @@ class ProductControllerTest {
 
     String productResponseJson;
     String productRequestJson;
+    String transactionRequestJson;
 
     UUID productId = randomUUID();
-
     Product requestProduct;
     Product responseProduct;
+    Transaction requestTransaction;
 
     @BeforeAll
     void setUp() {
@@ -61,6 +68,24 @@ class ProductControllerTest {
 
         productResponseJson = jsonStringFromObject(responseProduct);
         productRequestJson = jsonStringFromObject(requestProduct);
+
+        requestTransaction = Transaction.builder()
+                .totalToPay(BigDecimal.TEN)
+                .client(Client.builder()
+                        .id(randomUUID())
+                        .name("anyClient")
+                        .build())
+                .card(Card.builder()
+                        .id(randomUUID())
+                        .cardNumber("1111-1111-1111-1111")
+                        .value(7990)
+                        .cvv(789)
+                        .cardHolderName("anyName")
+//                        .expDate(LocalDate.parse(DateTimeFormatter.ofPattern("MM/dd").format(now()))) //todo: format for date - 27/10/2023
+                        .build())
+                .build();
+
+        transactionRequestJson = jsonStringFromObject(requestTransaction);
     }
 
     @Test
@@ -96,6 +121,17 @@ class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(productResponseJson)
+                );
+    }
+
+    @Test
+    void buyProduct() throws Exception {
+        when(productService.buyProduct(any())).thenReturn(requestTransaction);
+
+        mockMvc.perform(post("/starstore/buy/")
+                        .content(transactionRequestJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated()
                 );
     }
 }

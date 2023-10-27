@@ -1,10 +1,14 @@
 package com.example.desafiostone.service.impl;
 
 import com.example.desafiostone.entity.ProductEntity;
+import com.example.desafiostone.entity.TransactionEntity;
 import com.example.desafiostone.mapper.ProductMapper;
+import com.example.desafiostone.mapper.TransactionMapper;
 import com.example.desafiostone.model.Product;
+import com.example.desafiostone.model.Transaction;
 import com.example.desafiostone.repository.ProductRepository;
 import com.example.desafiostone.service.ProductService;
+import com.example.desafiostone.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +20,10 @@ import java.util.UUID;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final TransactionRepository transactionRepository;
 
     private final ProductMapper productMapper;
+    private final TransactionMapper transactionMapper;
 
     @Override
     public Product getProduct(UUID productId) {
@@ -38,5 +44,13 @@ public class ProductServiceImpl implements ProductService {
         productEntity = productRepository.save(productEntity);
 
         return productMapper.toModel(productEntity);
+    }
+
+    @Override
+    public Transaction buyProduct(Transaction transaction) {
+        TransactionEntity transactionEntity = transactionMapper.toEntity(transaction);
+        transactionEntity = transactionRepository.save(transactionEntity);
+
+        return transactionMapper.toModel(transactionEntity);
     }
 }

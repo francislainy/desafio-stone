@@ -18,6 +18,7 @@ public class ProductEntity {
 
     @Id
     @GeneratedValue
+    @Column(name = "id")
     private UUID id;
 
     @Column(name = "price")
