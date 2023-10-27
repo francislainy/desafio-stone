@@ -83,5 +83,4 @@ class CreateProductIT {
         Response response = getMockRequest(headers).body(product).post(path);
         assertEquals(201, response.getStatusCode());
     }
-
 }

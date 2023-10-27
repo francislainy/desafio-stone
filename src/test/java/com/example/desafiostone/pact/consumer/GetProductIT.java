@@ -60,5 +60,4 @@ class GetProductIT {
         Response response = getMockRequest(headers).get(path + productId);
         assertEquals(200, response.getStatusCode());
     }
-
 }
