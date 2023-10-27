@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ class ProductRepositoryTest {
     @Test
     void createAndRetrieveProduct() {
         ProductEntity productEntity = ProductEntity.builder()
+                .price(BigDecimal.TEN)
                 .title("anyProduct")
                 .zipcode("78993-000")
                 .seller("João da Silva")
@@ -38,6 +40,7 @@ class ProductRepositoryTest {
         ProductEntity finalProductEntity = productEntity;
         assertAll(
                 () -> assertEquals(finalProductEntity.getTitle(), optionalProductEntity.get().getTitle()),
+                () -> assertEquals(finalProductEntity.getPrice(), optionalProductEntity.get().getPrice()),
                 () -> assertEquals(finalProductEntity.getZipcode(), optionalProductEntity.get().getZipcode()),
                 () -> assertEquals(finalProductEntity.getSeller(), optionalProductEntity.get().getSeller()),
                 () -> assertEquals(finalProductEntity.getThumbnail(), optionalProductEntity.get().getThumbnail()),
@@ -48,6 +51,7 @@ class ProductRepositoryTest {
     @Test
     void getProducts() {
         ProductEntity productEntity = ProductEntity.builder()
+                .price(BigDecimal.TEN)
                 .title("anyProduct")
                 .zipcode("78993-000")
                 .seller("João da Silva")
@@ -64,6 +68,7 @@ class ProductRepositoryTest {
         ProductEntity finalProductEntity = productEntity;
         assertAll(
                 () -> assertEquals(finalProductEntity.getTitle(), productEntityList.get(0).getTitle()),
+                () -> assertEquals(finalProductEntity.getPrice(), productEntityList.get(0).getPrice()),
                 () -> assertEquals(finalProductEntity.getZipcode(), productEntityList.get(0).getZipcode()),
                 () -> assertEquals(finalProductEntity.getSeller(), productEntityList.get(0).getSeller()),
                 () -> assertEquals(finalProductEntity.getThumbnail(), productEntityList.get(0).getThumbnail()),

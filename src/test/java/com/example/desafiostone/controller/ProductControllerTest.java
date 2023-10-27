@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -48,6 +49,7 @@ class ProductControllerTest {
     void setUp() {
         requestProduct = Product.builder()
                 .title("anyProduct")
+                .price(BigDecimal.TEN)
                 .zipcode("78993-000")
                 .seller("João da Silva")
                 .thumbnail("https://cdn.awsli.com.br/600x450/21/21351/produto/3853007/f66e8c63ab.jpg")

@@ -3,6 +3,7 @@ package com.example.desafiostone.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -14,8 +15,7 @@ public class Product {
 
     private UUID id;
     private String title;
-
-    private double price; //todo: BigDecimal 26/10/2023
+    private BigDecimal price;
     private String zipcode;
     private String seller;
     private String thumbnail;

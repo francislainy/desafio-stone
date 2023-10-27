@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +54,7 @@ class ProductServiceTest {
 
         requestProductEntity = ProductEntity.builder()
                 .title("Blusa do Imperio")
+                .price(BigDecimal.TEN)
                 .zipcode("78993-000")
                 .seller("João da Silva")
                 .thumbnail("https://cdn.awsli.com.br/600x450/21/21351/produto/3853007/f66e8c63ab.jpg")
@@ -75,6 +77,7 @@ class ProductServiceTest {
         assertNotNull(actualProduct);
         assertAll(
                 () -> assertEquals(expectedProduct.getTitle(), actualProduct.getTitle()),
+                () -> assertEquals(expectedProduct.getPrice(), actualProduct.getPrice()),
                 () -> assertEquals(expectedProduct.getZipcode(), actualProduct.getZipcode()),
                 () -> assertEquals(expectedProduct.getSeller(), actualProduct.getSeller()),
                 () -> assertEquals(expectedProduct.getThumbnail(), actualProduct.getThumbnail()),
@@ -96,6 +99,7 @@ class ProductServiceTest {
         assertNotNull(actualProduct);
         assertAll(
                 () -> assertEquals(expectedProduct.getTitle(), actualProduct.getTitle()),
+                () -> assertEquals(expectedProduct.getPrice(), actualProduct.getPrice()),
                 () -> assertEquals(expectedProduct.getZipcode(), actualProduct.getZipcode()),
                 () -> assertEquals(expectedProduct.getSeller(), actualProduct.getSeller()),
                 () -> assertEquals(expectedProduct.getThumbnail(), actualProduct.getThumbnail()),
@@ -114,7 +118,7 @@ class ProductServiceTest {
         assertNotNull(actualProduct);
         assertAll(
                 () -> assertEquals(expectedProduct.getTitle(), actualProduct.getTitle()),
-                () -> assertEquals(expectedProduct.getZipcode(), actualProduct.getZipcode()),
+                () -> assertEquals(expectedProduct.getPrice(), actualProduct.getPrice()),
                 () -> assertEquals(expectedProduct.getSeller(), actualProduct.getSeller()),
                 () -> assertEquals(expectedProduct.getThumbnail(), actualProduct.getThumbnail()),
                 () -> assertEquals(expectedProduct.getDate(), actualProduct.getDate())

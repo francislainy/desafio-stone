@@ -3,6 +3,7 @@ package com.example.desafiostone.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -19,7 +20,8 @@ public class ProductEntity {
     @GeneratedValue
     private UUID id;
 
-    //todo: price - 26/10/2023
+    @Column(name = "price")
+    private BigDecimal price;
 
     @Column(name = "title")
     private String title;
