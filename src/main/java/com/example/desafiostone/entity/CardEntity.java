@@ -23,6 +23,9 @@ public class CardEntity {
     @Column(name = "card_number")
     private String cardNumber;
 
+    @Column(name = "card_holder_name")
+    private String cardHolderName;
+
     @Column(name = "value")
     private int value;
 
@@ -31,4 +34,7 @@ public class CardEntity {
 
     @Column(name = "exp_date")
     private LocalDate expDate;
+
+    @OneToOne(mappedBy = "cardEntity")
+    private TransactionEntity transactionEntity;
 }

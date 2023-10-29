@@ -76,4 +76,7 @@ class ProviderIT extends BasePostgresConfig {
 
     @State("A request to retrieve a list of products")
     void getProducts() {}
+
+    @State("A request to buy a product")
+    void buyProduct() {}
 }

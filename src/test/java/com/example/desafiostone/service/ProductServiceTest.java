@@ -150,8 +150,8 @@ class ProductServiceTest {
                         .cardNumber("1111-1111-1111-1111")
                         .value(7990)
                         .cvv(789)
-                        //.cardHolderName(); //todo: card holder - 27/10/2023
-                        .expDate(now()) //todo: format for date - 27/10/2023
+                        .cardHolderName("anyName")
+                        .expDate(now())
                         .build())
                 .build();
 

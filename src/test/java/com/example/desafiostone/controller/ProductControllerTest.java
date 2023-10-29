@@ -81,7 +81,7 @@ class ProductControllerTest {
                         .value(7990)
                         .cvv(789)
                         .cardHolderName("anyName")
-//                        .expDate(LocalDate.parse(DateTimeFormatter.ofPattern("MM/dd").format(now()))) //todo: format for date - 27/10/2023
+                        .expDate("10/27")
                         .build())
                 .build();
 

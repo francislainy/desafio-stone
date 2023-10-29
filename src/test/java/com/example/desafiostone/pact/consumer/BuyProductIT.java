@@ -24,7 +24,6 @@ import java.util.UUID;
 
 import static com.example.desafiostone.constants.Constants.*;
 import static com.example.desafiostone.utils.Util.getMockRequest;
-import static java.time.LocalDate.now;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.HttpMethod.POST;
 
@@ -83,7 +82,7 @@ class BuyProductIT {
                         .value(7990)
                         .cvv(789)
                         .cardHolderName("Luke Skywalker")
-                        .expDate(now())
+                        .expDate("10/27")
                 .build())
                 .build();
 
