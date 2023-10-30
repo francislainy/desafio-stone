@@ -52,11 +52,6 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-docker-compose</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.github.dzieciou.testing</groupId>
             <artifactId>curl-logger</artifactId>
             <version>${curl.logger.version}</version>
