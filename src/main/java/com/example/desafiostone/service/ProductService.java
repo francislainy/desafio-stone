@@ -1,5 +1,6 @@
 package com.example.desafiostone.service;
 
+import com.example.desafiostone.model.HistoryItem;
 import com.example.desafiostone.model.Product;
 import com.example.desafiostone.model.Transaction;
 
@@ -15,4 +16,6 @@ public interface ProductService {
     Product createProduct(Product product);
 
     Transaction buyProduct(Transaction transaction);
+
+    List<HistoryItem> getHistory();
 }

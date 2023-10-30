@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static java.time.LocalDate.now;
@@ -56,6 +57,43 @@ class TransactionRepositoryTest {
                 () -> assertEquals(finalTransactionEntity.getClientEntity(), optionalTransactionEntity.get().getClientEntity()),
                 () -> assertEquals(finalTransactionEntity.getTotalToPay(), optionalTransactionEntity.get().getTotalToPay()),
                 () -> assertEquals(finalTransactionEntity.getId(), optionalTransactionEntity.get().getId())
+        );
+    }
+
+    @Test
+    void getHistory() {
+        ClientEntity clientEntity = ClientEntity.builder()
+                .id(randomUUID())
+                .name("anyClient")
+                .build();
+        CardEntity cardEntity = CardEntity.builder()
+                .id(randomUUID())
+                .cardNumber("1111-1111-1111-1111")
+                .value(7990)
+                .cvv(789)
+                .cardHolderName("any name")
+                .expDate(now())
+                .build();
+
+        TransactionEntity transactionEntity = TransactionEntity.builder()
+                .id(randomUUID())
+                .totalToPay(BigDecimal.TEN)
+                .clientEntity(clientEntity)
+                .cardEntity(cardEntity)
+                .build();
+
+        transactionEntity = transactionRepository.save(transactionEntity);
+
+        List<TransactionEntity> transactionEntityList = transactionRepository.findAll();
+
+        TransactionEntity actualTransactionEntity = transactionEntityList.get(0);
+
+        TransactionEntity finalTransactionEntity = transactionEntity;
+        assertAll(
+                () -> assertEquals(finalTransactionEntity.getCardEntity(), actualTransactionEntity.getCardEntity()),
+                () -> assertEquals(finalTransactionEntity.getClientEntity(), actualTransactionEntity.getClientEntity()),
+                () -> assertEquals(finalTransactionEntity.getTotalToPay(), actualTransactionEntity.getTotalToPay()),
+                () -> assertEquals(finalTransactionEntity.getId(), actualTransactionEntity.getId())
         );
     }
 }

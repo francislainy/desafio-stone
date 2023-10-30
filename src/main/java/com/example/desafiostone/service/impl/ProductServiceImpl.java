@@ -4,6 +4,7 @@ import com.example.desafiostone.entity.ProductEntity;
 import com.example.desafiostone.entity.TransactionEntity;
 import com.example.desafiostone.mapper.ProductMapper;
 import com.example.desafiostone.mapper.TransactionMapper;
+import com.example.desafiostone.model.HistoryItem;
 import com.example.desafiostone.model.Product;
 import com.example.desafiostone.model.Transaction;
 import com.example.desafiostone.repository.ProductRepository;
@@ -52,5 +53,18 @@ public class ProductServiceImpl implements ProductService {
         transactionEntity = transactionRepository.save(transactionEntity);
 
         return transactionMapper.toModel(transactionEntity);
+    }
+
+    @Override
+    public List<HistoryItem> getHistory() {
+        return transactionRepository.findAll().stream()
+                .map(t -> HistoryItem.builder()
+                        .clientId(t.getClientEntity().getId())
+                        .purchaseId(t.getId())
+                        .value(t.getTotalToPay())
+                        .date(t.getCardEntity().getExpDate())
+                        .cardNumber(t.getCardEntity().getCardNumber())
+                        .build())
+                .toList();
     }
 }

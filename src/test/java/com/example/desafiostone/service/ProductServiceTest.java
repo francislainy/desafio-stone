@@ -6,6 +6,7 @@ import com.example.desafiostone.entity.ProductEntity;
 import com.example.desafiostone.entity.TransactionEntity;
 import com.example.desafiostone.mapper.ProductMapper;
 import com.example.desafiostone.mapper.TransactionMapper;
+import com.example.desafiostone.model.HistoryItem;
 import com.example.desafiostone.model.Product;
 import com.example.desafiostone.model.Transaction;
 import com.example.desafiostone.repository.ProductRepository;
@@ -170,6 +171,52 @@ class ProductServiceTest {
                 () -> assertEquals(transaction.getCard().getCvv(), actualTransaction.getCard().getCvv()),
                 () -> assertEquals(transaction.getCard().getCardHolderName(), actualTransaction.getCard().getCardHolderName()),
                 () -> assertEquals(transaction.getCard().getExpDate(), actualTransaction.getCard().getExpDate())
+        );
+    }
+
+    @Test
+    void getHistory() {
+        UUID clientId = randomUUID();
+        UUID purchaseId = randomUUID();
+
+        HistoryItem historyItem = HistoryItem.builder()
+                .clientId(clientId)
+                .purchaseId(purchaseId)
+                .value(BigDecimal.TEN)
+                .date(now())
+                .cardNumber("**** **** **** 1111")
+                .build();
+
+        TransactionEntity transactionEntity = TransactionEntity.builder()
+                .id(purchaseId)
+                .totalToPay(BigDecimal.TEN)
+                .clientEntity(ClientEntity.builder()
+                        .id(clientId)
+                        .name("anyClient")
+                        .build())
+                .cardEntity(CardEntity.builder()
+                        .id(randomUUID())
+                        .cardNumber("**** **** **** 1111")
+                        .value(7990)
+                        .cvv(789)
+                        .cardHolderName("anyName")
+                        .expDate(now())
+                        .build())
+                .build();
+
+        when(transactionRepository.findAll()).thenReturn(List.of(transactionEntity));
+
+        List<HistoryItem> historyItemList = productService.getHistory();
+
+        assertFalse(historyItemList.isEmpty());
+
+        HistoryItem actualHistory = historyItemList.get(0);
+        assertAll(
+                () -> assertEquals(historyItem.getClientId(), actualHistory.getClientId()),
+                () -> assertEquals(historyItem.getPurchaseId(), actualHistory.getPurchaseId()),
+                () -> assertEquals(historyItem.getValue(), actualHistory.getValue()),
+                () -> assertEquals(historyItem.getDate(), actualHistory.getDate()),
+                () -> assertEquals(historyItem.getCardNumber(), actualHistory.getCardNumber())
         );
     }
 }

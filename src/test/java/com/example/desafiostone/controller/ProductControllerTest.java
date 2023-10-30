@@ -1,9 +1,6 @@
 package com.example.desafiostone.controller;
 
-import com.example.desafiostone.model.Card;
-import com.example.desafiostone.model.Client;
-import com.example.desafiostone.model.Product;
-import com.example.desafiostone.model.Transaction;
+import com.example.desafiostone.model.*;
 import com.example.desafiostone.service.ProductService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,10 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,14 +36,16 @@ class ProductControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    UUID productId = randomUUID();
+
     String productResponseJson;
     String productRequestJson;
     String transactionRequestJson;
 
-    UUID productId = randomUUID();
     Product requestProduct;
     Product responseProduct;
     Transaction requestTransaction;
+    HistoryItem historyItem;
 
     @BeforeAll
     void setUp() {
@@ -86,6 +81,17 @@ class ProductControllerTest {
                 .build();
 
         transactionRequestJson = jsonStringFromObject(requestTransaction);
+
+        UUID clientId = randomUUID();
+        UUID purchaseId = randomUUID();
+
+        historyItem = HistoryItem.builder()
+                .clientId(clientId)
+                .purchaseId(purchaseId)
+                .value(BigDecimal.TEN)
+                .date(now())
+                .cardNumber("**** **** **** 1111")
+                .build();
     }
 
     @Test
@@ -100,10 +106,8 @@ class ProductControllerTest {
 
     @Test
     void getProducts() throws Exception {
-        when(productService.getProducts()).thenReturn(List.of(responseProduct));
-
-        List<Product> productList = new ArrayList<>();
-        productList.add(responseProduct);
+        List<Product> productList = List.of(responseProduct);
+        when(productService.getProducts()).thenReturn(productList);
 
         String jsonResponse = jsonStringFromObject(productList);
         mockMvc.perform(get("/starstore/products/", productId))
@@ -132,6 +136,19 @@ class ProductControllerTest {
                         .content(transactionRequestJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()
+                );
+    }
+
+    @Test
+    void getHistoryOfTransactions() throws Exception {
+        List<HistoryItem> historyItemList = List.of(historyItem);
+        when(productService.getHistory()).thenReturn(historyItemList);
+
+        String jsonResponse = jsonStringFromObject(historyItemList);
+
+        mockMvc.perform(get("/starstore/history/")
+                        .content(jsonResponse))
+                .andExpect(status().isOk()
                 );
     }
 }
