@@ -96,4 +96,41 @@ class TransactionRepositoryTest {
                 () -> assertEquals(finalTransactionEntity.getId(), actualTransactionEntity.getId())
         );
     }
+
+    @Test
+    void getHistoryForClient() {
+        ClientEntity clientEntity = ClientEntity.builder()
+                .id(randomUUID())
+                .name("anyClient")
+                .build();
+        CardEntity cardEntity = CardEntity.builder()
+                .id(randomUUID())
+                .cardNumber("1111-1111-1111-1111")
+                .value(7990)
+                .cvv(789)
+                .cardHolderName("any name")
+                .expDate(now())
+                .build();
+
+        TransactionEntity transactionEntity = TransactionEntity.builder()
+                .id(randomUUID())
+                .totalToPay(BigDecimal.TEN)
+                .clientEntity(clientEntity)
+                .cardEntity(cardEntity)
+                .build();
+
+        transactionEntity = transactionRepository.save(transactionEntity);
+
+        List<TransactionEntity> transactionEntityList = transactionRepository.findByClientEntityId(clientEntity.getId());
+
+        TransactionEntity actualTransactionEntity = transactionEntityList.get(0);
+
+        TransactionEntity finalTransactionEntity = transactionEntity;
+        assertAll(
+                () -> assertEquals(finalTransactionEntity.getCardEntity(), actualTransactionEntity.getCardEntity()),
+                () -> assertEquals(finalTransactionEntity.getClientEntity(), actualTransactionEntity.getClientEntity()),
+                () -> assertEquals(finalTransactionEntity.getTotalToPay(), actualTransactionEntity.getTotalToPay()),
+                () -> assertEquals(finalTransactionEntity.getId(), actualTransactionEntity.getId())
+        );
+    }
 }

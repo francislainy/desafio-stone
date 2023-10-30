@@ -175,7 +175,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void getHistory() {
+    void getHistoryForClient() {
         UUID clientId = randomUUID();
         UUID purchaseId = randomUUID();
 
@@ -204,9 +204,9 @@ class ProductServiceTest {
                         .build())
                 .build();
 
-        when(transactionRepository.findAll()).thenReturn(List.of(transactionEntity));
+        when(transactionRepository.findByClientEntityId(any())).thenReturn(List.of(transactionEntity));
 
-        List<HistoryItem> historyItemList = productService.getHistory();
+        List<HistoryItem> historyItemList = productService.getHistoryForClient(clientId);
 
         assertFalse(historyItemList.isEmpty());
 

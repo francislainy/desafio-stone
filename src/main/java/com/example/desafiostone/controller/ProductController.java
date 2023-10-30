@@ -43,4 +43,9 @@ public class ProductController {
     public ResponseEntity<List<HistoryItem>> getHistory() {
         return new ResponseEntity<>(productService.getHistory(), HttpStatus.OK);
     }
+
+    @GetMapping({"/history/{clientId}", "/history/{clientId}"})
+    public ResponseEntity<List<HistoryItem>> getHistoryForClient(@PathVariable UUID clientId) {
+        return new ResponseEntity<>(productService.getHistoryForClient(clientId), HttpStatus.OK);
+    }
 }

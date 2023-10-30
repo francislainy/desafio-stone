@@ -18,4 +18,6 @@ public interface ProductService {
     Transaction buyProduct(Transaction transaction);
 
     List<HistoryItem> getHistory();
+
+    List<HistoryItem> getHistoryForClient(UUID clientId);
 }

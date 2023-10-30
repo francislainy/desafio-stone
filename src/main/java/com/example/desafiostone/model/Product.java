@@ -19,7 +19,6 @@ public class Product {
     private String zipcode;
     private String seller;
     private String thumbnail;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy") //todo: verify format - 30/10/2023
     private LocalDate date;
 }

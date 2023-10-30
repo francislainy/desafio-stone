@@ -72,14 +72,26 @@ class ProviderIT extends BasePostgresConfig {
     }
 
     @State("A request to create a product")
-    void createProduct() {}
+    void createProduct() {
+    }
 
     @State("A request to retrieve a list of products")
-    void getProducts() {}
+    void getProducts() {
+    }
 
     @State("A request to buy a product")
-    void buyProduct() {}
+    void buyProduct() {
+    }
 
     @State("A request to retrieve the history of transactions")
-    void getHistoryOfTransactions() {}
+    void getHistoryOfTransactions() {
+    }
+
+    @State("A request to retrieve the history of transactions for a client")
+    Map<String, Object> getHistoryOfTransactionsForClient() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("clientId", "f0652d7b-1fb4-490d-9fbf-adc23c65b2df");
+        return map;
+    }
+
 }

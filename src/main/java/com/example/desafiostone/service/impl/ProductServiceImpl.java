@@ -67,4 +67,17 @@ public class ProductServiceImpl implements ProductService {
                         .build())
                 .toList();
     }
+
+    @Override
+    public List<HistoryItem> getHistoryForClient(UUID clientId) {
+        return transactionRepository.findByClientEntityId(clientId).stream()
+                .map(t -> HistoryItem.builder()
+                        .clientId(t.getClientEntity().getId())
+                        .purchaseId(t.getId())
+                        .value(t.getTotalToPay())
+                        .date(t.getCardEntity().getExpDate())
+                        .cardNumber(t.getCardEntity().getCardNumber())
+                        .build())
+                .toList();
+    }
 }

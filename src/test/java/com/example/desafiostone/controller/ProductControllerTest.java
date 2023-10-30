@@ -151,4 +151,19 @@ class ProductControllerTest {
                 .andExpect(status().isOk()
                 );
     }
+
+    @Test
+    void getHistoryOfTransactionsForClient() throws Exception {
+        UUID clientId = randomUUID();
+
+        List<HistoryItem> historyItemList = List.of(historyItem);
+        when(productService.getHistoryForClient(any())).thenReturn(historyItemList);
+
+        String jsonResponse = jsonStringFromObject(historyItemList);
+
+        mockMvc.perform(get("/starstore/history/{clientId}", clientId)
+                        .content(jsonResponse))
+                .andExpect(status().isOk()
+                );
+    }
 }
