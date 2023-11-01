@@ -1,5 +1,6 @@
 package com.example.desafiostone.repository;
 
+import com.example.desafiostone.config.BasePostgresConfig;
 import com.example.desafiostone.entity.CardEntity;
 import com.example.desafiostone.entity.ClientEntity;
 import com.example.desafiostone.entity.TransactionEntity;
@@ -7,10 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static java.time.LocalDate.now;
 import static java.util.UUID.randomUUID;
@@ -18,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class TransactionRepositoryTest {
+class TransactionRepositoryTest extends BasePostgresConfig {
 
     @Autowired
     TransactionRepository transactionRepository;
@@ -62,16 +65,21 @@ class TransactionRepositoryTest {
 
     @Test
     void getHistory() {
+
+        UUID clientId = randomUUID();
+        UUID cardId = randomUUID();
+
         ClientEntity clientEntity = ClientEntity.builder()
-                .id(randomUUID())
+                .id(clientId)
                 .name("anyClient")
                 .build();
+
         CardEntity cardEntity = CardEntity.builder()
-                .id(randomUUID())
+                .id(cardId)
                 .cardNumber("1111-1111-1111-1111")
                 .value(7990)
                 .cvv(789)
-                .cardHolderName("any name")
+                .cardHolderName("anyName")
                 .expDate(now())
                 .build();
 
@@ -90,8 +98,8 @@ class TransactionRepositoryTest {
 
         TransactionEntity finalTransactionEntity = transactionEntity;
         assertAll(
-                () -> assertEquals(finalTransactionEntity.getCardEntity(), actualTransactionEntity.getCardEntity()),
                 () -> assertEquals(finalTransactionEntity.getClientEntity(), actualTransactionEntity.getClientEntity()),
+                () -> assertEquals(finalTransactionEntity.getCardEntity(), actualTransactionEntity.getCardEntity()),
                 () -> assertEquals(finalTransactionEntity.getTotalToPay(), actualTransactionEntity.getTotalToPay()),
                 () -> assertEquals(finalTransactionEntity.getId(), actualTransactionEntity.getId())
         );
