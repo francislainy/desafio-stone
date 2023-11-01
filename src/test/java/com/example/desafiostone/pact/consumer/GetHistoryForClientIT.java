@@ -40,7 +40,7 @@ class GetHistoryForClientIT {
         headers.put("Accept", "application/json");
 
         DslPart bodyReturned = PactDslJsonArray.arrayEachLike(2)
-                .uuid("client_id", clientId)
+                .uuid("cent_id", clientId)
                 .uuid("purchase_id", randomUUID())
                 .numberType("value", 1234)
                 .date("19/08/2016", "dd/MM/YYYY", new Date())

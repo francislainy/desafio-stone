@@ -1,13 +1,17 @@
-package com.example.desafiostone.model;
+package com.example.desafiostone.pact.consumer;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sngular.annotation.pact.Example;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+
+import com.sngular.annotation.pact.Example;
 import com.sngular.annotation.pact.PactDslBodyBuilder;
 
 @Data
