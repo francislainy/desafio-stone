@@ -93,5 +93,4 @@ class ProviderIT extends BasePostgresConfig {
         map.put("clientId", "f0652d7b-1fb4-490d-9fbf-adc23c65b2df");
         return map;
     }
-
 }

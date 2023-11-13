@@ -23,7 +23,7 @@ public class TransactionEntity {
     @Column(name = "total_to_pay")
     private BigDecimal totalToPay;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private ClientEntity clientEntity;
 

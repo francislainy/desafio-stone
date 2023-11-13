@@ -63,11 +63,9 @@ class TransactionRepositoryTest {
     @Test
     void getHistory() {
         ClientEntity clientEntity = ClientEntity.builder()
-                .id(randomUUID())
                 .name("anyClient")
                 .build();
         CardEntity cardEntity = CardEntity.builder()
-                .id(randomUUID())
                 .cardNumber("1111-1111-1111-1111")
                 .value(7990)
                 .cvv(789)
@@ -76,7 +74,6 @@ class TransactionRepositoryTest {
                 .build();
 
         TransactionEntity transactionEntity = TransactionEntity.builder()
-                .id(randomUUID())
                 .totalToPay(BigDecimal.TEN)
                 .clientEntity(clientEntity)
                 .cardEntity(cardEntity)
